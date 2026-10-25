@@ -4,6 +4,7 @@ import './style.css';
 import tripCsv from '../data/trip.csv?raw';
 import { parseTripCsv } from './csv.js';
 import { createRouteAnimation } from './animation.js';
+import { ATTRIBUTION_TEXT, basemapStyle } from './basemap.js';
 import { createControls } from './controls.js';
 import { downloadBlob, exportMp4 } from './exporter.js';
 
@@ -12,7 +13,7 @@ const coordinates = points.map((p) => [p.lon, p.lat]);
 
 const map = new maplibregl.Map({
   container: 'map',
-  style: 'https://demotiles.maplibre.org/style.json',
+  style: basemapStyle,
   center: coordinates[0],
   zoom: 11,
   // Keep the last frame readable so the exporter can copy it after rendering.
@@ -92,7 +93,7 @@ map.on('load', () => {
       // Freeze the camera so the video isn't affected by accidental drags.
       map.getCanvasContainer().style.pointerEvents = 'none';
       try {
-        const blob = await exportMp4(map, animation, { onProgress });
+        const blob = await exportMp4(map, animation, { attribution: ATTRIBUTION_TEXT, onProgress });
         downloadBlob(blob, 'trip.mp4');
       } finally {
         map.getCanvasContainer().style.pointerEvents = '';

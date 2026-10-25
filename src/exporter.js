@@ -16,7 +16,7 @@ const timeFormat = new Intl.DateTimeFormat('ja-JP', {
 
 // Steps the animation frame by frame (not in real time), so the video is smooth
 // regardless of how fast the map actually renders.
-export async function exportMp4(map, animation, { fps = 30, onProgress } = {}) {
+export async function exportMp4(map, animation, { fps = 30, attribution, onProgress } = {}) {
   const src = map.getCanvas();
   // H.264 requires even dimensions.
   const width = src.width & ~1;
@@ -42,7 +42,9 @@ export async function exportMp4(map, animation, { fps = 30, onProgress } = {}) {
       map.triggerRepaint();
       await map.once('idle');
       ctx.drawImage(src, 0, 0, width, height, 0, 0, width, height);
-      drawClock(ctx, frame.time, window.devicePixelRatio || 1);
+      const scale = window.devicePixelRatio || 1;
+      drawClock(ctx, frame.time, scale);
+      if (attribution) drawAttribution(ctx, attribution, scale);
       await source.add(i / fps, 1 / fps);
       onProgress?.(i / totalFrames);
     }
@@ -65,6 +67,21 @@ function drawClock(ctx, time, scale) {
   ctx.fillStyle = '#222';
   ctx.textBaseline = 'middle';
   ctx.fillText(text, 16 * scale + pad, 16 * scale + h / 2);
+}
+
+// The map's attribution control is DOM, so the required credit is drawn onto the frame.
+function drawAttribution(ctx, text, scale) {
+  const pad = 6 * scale;
+  ctx.font = `${12 * scale}px system-ui, sans-serif`;
+  const w = ctx.measureText(text).width + pad * 2;
+  const h = 20 * scale;
+  const x = ctx.canvas.width - w;
+  const y = ctx.canvas.height - h;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = '#333';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x + pad, y + h / 2);
 }
 
 export function downloadBlob(blob, filename) {

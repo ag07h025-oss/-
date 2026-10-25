@@ -9,6 +9,7 @@
 
 - ビルド / 開発サーバー: Vite
 - 地図: MapLibre GL JS
+- ベースマップ: 国土地理院 地理院タイル（淡色地図・ラスタ）。設定は `src/basemap.js`
 - 動画書き出し: Mediabunny（WebCodecs で H.264 エンコード → MP4 に mux）
 - 言語: JavaScript（ES Modules、`"type": "module"`）。フレームワークは使わない
 - データ: CSV（`timestamp,lat,lon,label`）。`?raw` インポートで読み込み、`src/csv.js` でパースする
@@ -33,4 +34,5 @@
 - コメントは「なぜそうしたか」が自明でない箇所だけ書く
 - 動画に映すものは地図の canvas 上にレイヤーとして描く。DOM 要素（`maplibregl.Marker` など）は動画に写らない。canvas 外の情報（時刻など）は `exporter.js` で 2D canvas に重ねて描く
 - mp4 書き出しは実時間ではなく `seek(progress)` → `map.once('idle')` → フレーム取得の順で 1 フレームずつ進める。読み取りのため Map は `preserveDrawingBuffer: true` で作成している
+- 地理院タイルの出典表示（画面のアトリビューションと動画右下の「出典: 国土地理院」）は利用条件なので消さない
 - 生成物（`dist/`、`*.mp4` などの動画）はコミットしない
