@@ -1,0 +1,41 @@
+html,
+body,
+#map {
+  margin: 0;
+  height: 100%;
+}
+
+.controls {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font: 14px system-ui, sans-serif;
+}
+
+.controls button,
+.controls select {
+  font: inherit;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.controls input[type='range'] {
+  flex: 1;
+  min-width: 80px;
+}
+
+.controls__clock {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
