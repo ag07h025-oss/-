@@ -9,7 +9,7 @@
 
 - ビルド / 開発サーバー: Vite
 - 地図: MapLibre GL JS
-- ベースマップ: 国土地理院 地理院タイル（淡色地図・ラスタ）。設定は `src/basemap.js`
+- ベースマップ: 国土地理院 地理院タイル（標準地図・ラスタ）。設定は `src/basemap.js`
 - 動画書き出し: Mediabunny（WebCodecs で H.264 エンコード → MP4 に mux）
 - 言語: JavaScript（ES Modules、`"type": "module"`）。フレームワークは使わない
 - データ: CSV（`timestamp,lat,lon,label`）。`?raw` インポートで読み込み、`src/csv.js` でパースする

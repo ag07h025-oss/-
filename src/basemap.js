@@ -10,7 +10,7 @@ export const basemapStyle = {
   sources: {
     gsi: {
       type: 'raster',
-      tiles: ['https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png'],
+      tiles: ['https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png'],
       tileSize: 256,
       minzoom: 2,
       maxzoom: 18,
