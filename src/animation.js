@@ -59,7 +59,9 @@ export function createRouteAnimation(map, points, { durationMs = 20000, onFrame 
       type: 'Feature',
       geometry: { type: 'Point', coordinates: head },
     });
-    onFrame?.({ progress, time: new Date(time), playing });
+    const frame = { progress, time: new Date(time), playing };
+    onFrame?.(frame);
+    return frame;
   }
 
   function tick(ts) {
@@ -108,6 +110,10 @@ export function createRouteAnimation(map, points, { durationMs = 20000, onFrame 
     setSpeed(value) {
       speed = value;
     },
+    get speed() {
+      return speed;
+    },
+    durationMs,
     get playing() {
       return playing;
     },

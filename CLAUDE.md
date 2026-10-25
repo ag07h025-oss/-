@@ -3,12 +3,13 @@
 ## プロジェクト概要
 
 旅行・移動の軌跡（`data/trip.csv`）を MapLibre GL JS の地図上に可視化する Web アプリ。
-ルートの線・地点マーカーに加え、タイムスタンプに沿ったルートのアニメーション表示（`src/animation.js`）と再生コントロール（`src/controls.js`）を実装済み。今後は動画（mp4）への書き出しを追加する予定。
+ルートの線・地点マーカーに加え、タイムスタンプに沿ったルートのアニメーション表示（`src/animation.js`）と再生コントロール（`src/controls.js`）、mp4 書き出し（`src/exporter.js`）を実装済み。
 
 ## 技術スタック
 
 - ビルド / 開発サーバー: Vite
 - 地図: MapLibre GL JS
+- 動画書き出し: Mediabunny（WebCodecs で H.264 エンコード → MP4 に mux）
 - 言語: JavaScript（ES Modules、`"type": "module"`）。フレームワークは使わない
 - データ: CSV（`timestamp,lat,lon,label`）。`?raw` インポートで読み込み、`src/csv.js` でパースする
 
@@ -30,4 +31,6 @@
 - アニメーションの描画は `renderAt(progress)`（0〜1）の純粋な関数として保つ。requestAnimationFrame のループと描画を分離しておくことで、動画書き出し時にフレームを決定的に生成できる
 - インデント 2 スペース、シングルクォート、セミコロンあり
 - コメントは「なぜそうしたか」が自明でない箇所だけ書く
+- 動画に映すものは地図の canvas 上にレイヤーとして描く。DOM 要素（`maplibregl.Marker` など）は動画に写らない。canvas 外の情報（時刻など）は `exporter.js` で 2D canvas に重ねて描く
+- mp4 書き出しは実時間ではなく `seek(progress)` → `map.once('idle')` → フレーム取得の順で 1 フレームずつ進める。読み取りのため Map は `preserveDrawingBuffer: true` で作成している
 - 生成物（`dist/`、`*.mp4` などの動画）はコミットしない

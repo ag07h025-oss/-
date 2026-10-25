@@ -11,6 +11,7 @@ export function createControls(container) {
       ${SPEEDS.map((s) => `<option value="${s}"${s === 1 ? ' selected' : ''}>${s}x</option>`).join('')}
     </select>
     <span data-role="clock" class="controls__clock"></span>
+    <button type="button" data-role="export">⬇ mp4</button>
   `;
   container.appendChild(root);
 
@@ -26,7 +27,21 @@ export function createControls(container) {
   });
 
   return {
-    bind(animation) {
+    bind(animation, { onExport }) {
+      const exportBtn = $('export');
+      exportBtn.addEventListener('click', async () => {
+        root.classList.add('controls--busy');
+        try {
+          await onExport((ratio) => {
+            exportBtn.textContent = `書き出し中 ${Math.round(ratio * 100)}%`;
+          });
+        } catch (err) {
+          alert(`書き出しに失敗しました: ${err.message}`);
+        } finally {
+          root.classList.remove('controls--busy');
+          exportBtn.textContent = '⬇ mp4';
+        }
+      });
       toggleBtn.addEventListener('click', () => animation.toggle());
       $('restart').addEventListener('click', () => animation.restart());
       $('speed').addEventListener('change', (e) => animation.setSpeed(Number(e.target.value)));

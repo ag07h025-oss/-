@@ -39,3 +39,13 @@ body,
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* Disable every control except the progress label while exporting. */
+.controls--busy > * {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.controls--busy [data-role='export'] {
+  opacity: 1;
+}
