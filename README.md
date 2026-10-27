@@ -48,6 +48,13 @@ CSV の `timestamp` に比例して進むため、滞在時間が長い区間ほ
 
 ### データの差し替え
 
+`data/` に置いた CSV は URL の `?trip=<ファイル名>` で切り替えられます（指定がなければ `trip.csv`）。
+
+- `http://localhost:5173/` — 東京の日帰りルート（`data/trip.csv`）
+- `http://localhost:5173/?trip=izumo` — 出雲大社周辺の観光ルート（`data/izumo.csv`）
+
+書き出す mp4 のファイル名も `<ファイル名>.mp4` になります。
+
 `data/trip.csv` を編集すると、地図上のルートが変わります。フォーマットは次のとおりです。
 
 | 列名        | 型     | 説明                                   |
@@ -63,7 +70,9 @@ CSV の `timestamp` に比例して進むため、滞在時間が長い区間ほ
 
 ```
 .
-├── data/trip.csv   # サンプルの移動データ
+├── data/
+│   ├── trip.csv    # サンプル: 東京の日帰りルート
+│   └── izumo.csv   # サンプル: 出雲大社周辺の観光ルート
 ├── index.html      # エントリー HTML
 └── src/
     ├── main.js       # 地図の初期化・各モジュールの組み立て

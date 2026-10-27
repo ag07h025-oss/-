@@ -1,13 +1,17 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './style.css';
-import tripCsv from '../data/trip.csv?raw';
 import { parseTripCsv } from './csv.js';
 import { createRouteAnimation } from './animation.js';
 import { ATTRIBUTION_TEXT, basemapStyle } from './basemap.js';
 import { createControls } from './controls.js';
 import { downloadBlob, exportMp4 } from './exporter.js';
 
+// Pick a dataset from data/ with ?trip=<name> (defaults to trip.csv).
+const datasets = import.meta.glob('../data/*.csv', { query: '?raw', import: 'default', eager: true });
+const requested = new URLSearchParams(location.search).get('trip');
+const tripName = datasets[`../data/${requested}.csv`] ? requested : 'trip';
+const tripCsv = datasets[`../data/${tripName}.csv`];
 const points = parseTripCsv(tripCsv);
 const coordinates = points.map((p) => [p.lon, p.lat]);
 
@@ -94,7 +98,7 @@ map.on('load', () => {
       map.getCanvasContainer().style.pointerEvents = 'none';
       try {
         const blob = await exportMp4(map, animation, { attribution: ATTRIBUTION_TEXT, onProgress });
-        downloadBlob(blob, 'trip.mp4');
+        downloadBlob(blob, `${tripName}.mp4`);
       } finally {
         map.getCanvasContainer().style.pointerEvents = '';
       }
